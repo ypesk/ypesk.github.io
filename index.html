@@ -73,7 +73,7 @@
             <!-- Location section will be pushed down by flexbox -->
             <div class="sidebar-location-section">
                 <h3><i class="fa-solid fa-map-location-dot fa-fw"></i> Current Location</h3>
-                <img src="images/map.png" alt="Map indicating location near Biot/Sophia Antipolis, France" class="sidebar-bottom-image">
+                <img src="images/map.png" alt="Map indicating location in southern France" class="sidebar-bottom-image">
             </div>
 
         </aside>
@@ -85,7 +85,7 @@
                 <h2><i class="fa-solid fa-user fa-fw"></i> About Me</h2>
                 <p>
                   Hi! 👋
-                  <br>
+                  <br><br>
                   I am a recent PhD Graduate from Sorbonne Université (EURECOM) and I'm currently seeking job opportunities in AI research, either in academia (Post-Doc) or in a company.
                   I have a strong background in deep learning, particularly for natural language processing, computer vision, digital signal processing and knowledge graphs. I've published on topics such as misinformation detection, social discourse analysis, knowledge engeneering and computer vision.
                 </p>
@@ -112,25 +112,33 @@
                 </ul>
             </section>
 
+
+
             <section id="education" class="animated-section">
                 <h2><i class="fa-solid fa-graduation-cap fa-fw"></i> Education</h2>
-                <div class="education-entry">
+
+                <!-- Entry 1: Sorbonne/EURECOM -->
+                <div class="education-entry edu-sorbonne-eurecom">
                     <h3>Ph.D. in Computer Science</h3>
                     <p class="institution-location">
-                      <i class="fa-solid fa-building-columns fa-fw"></i>
-                      <span class="institution-name">Sorbonne Université / EURECOM</span>
-                      <i class="fa-solid fa-location-dot fa-fw location-icon"></i> <!-- Location icon -->
-                      <span class="location-text">Biot, France</span>
+                      <i class="fa-solid fa-calendar-alt fa-fw date-icon"></i> <!-- Date Icon First -->
+                      <span class="date-text">2021 - 2025</span> <!-- Date Text -->
+                      <span class="info-separator"></span> <!-- Separator 1 -->
+                      <i class="fa-solid fa-building-columns fa-fw institution-icon"></i> <!-- Uni Icon -->
+                      <span class="institution-name">Sorbonne Université / EURECOM</span> <!-- Uni Name -->
+                      <span class="info-separator"></span> <!-- Separator 2 -->
+                      <i class="fa-solid fa-location-dot fa-fw location-icon"></i> <!-- Loc Icon -->
+                      <span class="location-text">Sophia Antipolis, France</span> <!-- Loc Text -->
                     </p>
-                    <p class="dates"><i class="fa-solid fa-calendar-alt fa-fw"></i> 2021 - 2025</p>
+                    <!-- Rest of the entry details remain the same -->
                     <p class="details">
                       <i class="fa-solid fa-user fa-fw"></i>
                       <strong>Advisor:</strong> <a href="https://scholar.google.com/citations?hl=en&user=YwoezYX7JVgJ" target="_blank" rel="noopener noreferrer">Paolo Papotti</a>
-                      <span class="details-separator"></span> <!-- Separator (optional styling via CSS if needed) -->
+                      <span class="details-separator"></span>
                       <i class="fa-solid fa-user fa-fw"></i>
                       <strong>Co-Advisor:</strong> <a href="https://scholar.google.com/citations?user=1BxhcigAAAAJ&hl=en" target="_blank" rel="noopener noreferrer">Raphael Troncy</a>
                     </p>
-                    <p class="details"><strong>Thesis:</strong> "Using Knowledge Graphs to Detect and Explain Misinformation Spread on the Web"</p>
+                    <p class="details thesis-title"><strong>Thesis: </strong><a href="https://theses.fr/s384398" target="_blank" rel="noopener noreferrer"><span class="title-text">Using Knowledge Graphs to Detect and Explain Misinformation Spread on the Web</span></a></p>
                     <div class="details description">
                       <p>Detection and analysis of misinformation using AI.
                         Trained BERT-based models to detect conspiracy theories, persuasion techniques, emotion, sentiment, political leaning and tropes.
@@ -140,40 +148,56 @@
                     </div>
                     <p class="details"><strong>Keywords:</strong> NLP, Misinformation, Knowledge Graphs, Features, Textual Similarity </p>
                 </div>
+
                 <hr class="entry-separator">
-                <div class="education-entry">
+
+                 <!-- Entry 2: Polytechnique Montréal -->
+                <div class="education-entry edu-polytechnique">
                     <h3>M.S. in Computer Science</h3>
-                    <p class="institution-location">
-                      <i class="fa-solid fa-building-columns fa-fw"></i>
-                      <span class="institution-name">Polytechnic Montréal</span>
-                      <i class="fa-solid fa-location-dot fa-fw location-icon"></i> <!-- Location icon -->
-                      <span class="location-text">Montréal, Canada</span>
+                     <p class="institution-location">
+                      <i class="fa-solid fa-calendar-alt fa-fw date-icon"></i> <!-- Date Icon First -->
+                      <span class="date-text">2018 - 2020</span> <!-- Date Text -->
+                      <span class="info-separator"></span> <!-- Separator 1 -->
+                      <i class="fa-solid fa-building-columns fa-fw institution-icon"></i> <!-- Uni Icon -->
+                      <span class="institution-name">Polytechnic Montréal</span> <!-- Uni Name -->
+                      <span class="info-separator"></span> <!-- Separator 2 -->
+                      <i class="fa-solid fa-location-dot fa-fw location-icon"></i> <!-- Loc Icon -->
+                      <span class="location-text">Montréal, Canada</span> <!-- Loc Text -->
                     </p>
-                    <p class="dates"><i class="fa-solid fa-calendar-alt fa-fw"></i> 2018 - 2020</p>
+                    <!-- Rest of the entry details remain the same -->
                     <p class="details"><i class="fa-solid fa-user fa-fw"></i><strong>Advisor:</strong> <a href="https://scholar.google.com/citations?user=JnmZTOEAAAAJ&hl=fr&oi=ao" target="_blank" rel="noopener noreferrer">Farida Cheriet</a></p>
-                    <p class="details"><strong>Thesis:</strong> "Automatic Screening of Diabetic Retinopathy in Fundus Images Using Deep Learning"</p>
+                    <p class="details thesis-title"><strong>Thesis: </strong><a href="https://publications.polymtl.ca/5415/" target="_blank" rel="noopener noreferrer"><span class="title-text">Automatic Screening of Diabetic Retinopathy in Fundus Images Using Deep Learning</span></a></p>
                     <p class="details">Trained models to detect diabetic retinopathy in medical images. Developed a novel technique to assess the quality of medical images.</p>
                     <div class="details description">
                       <p><strong>Relevant courses:</strong> Machine learning and deep learning, Computer Vision, Image and Signal Processing, Infography, Virtual & Augmented Reality.</p>
                       <p><strong>Relevant Projects:</strong> Developed a DQN reinforcement learning agent (Python); Created a virtual reality application integrating HTC Vive and CAVE interactions (Unity, C#).</p>
                     </div>
                 </div>
+
                 <hr class="entry-separator">
-                <div class="education-entry">
+
+                <!-- Entry 3: Télécom SudParis -->
+                <div class="education-entry edu-telecom">
                     <h3>Engineering Diploma (Diplôme d'Ingénieur)</h3>
                     <p class="institution-location">
-                      <i class="fa-solid fa-building-columns fa-fw"></i>
-                      <span class="institution-name">Institut Polytechnique de Paris / Télécom SudParis</span>
-                      <i class="fa-solid fa-location-dot fa-fw location-icon"></i> <!-- Location icon -->
-                      <span class="location-text">Evry, France</span>
+                      <i class="fa-solid fa-calendar-alt fa-fw date-icon"></i> <!-- Date Icon First -->
+                      <span class="date-text">2016 - 2020</span> <!-- Date Text -->
+                      <span class="info-separator"></span> <!-- Separator 1 -->
+                      <i class="fa-solid fa-building-columns fa-fw institution-icon"></i> <!-- Uni Icon -->
+                      <span class="institution-name">Institut Polytechnique de Paris / Télécom SudParis</span> <!-- Uni Name -->
+                      <span class="info-separator"></span> <!-- Separator 2 -->
+                      <i class="fa-solid fa-location-dot fa-fw location-icon"></i> <!-- Loc Icon -->
+                      <span class="location-text">Evry, France</span> <!-- Loc Text -->
                     </p>
-                    <p class="dates"><i class="fa-solid fa-calendar-alt fa-fw"></i> 2016 - 2020</p>
+                     <!-- Rest of the entry details remain the same -->
                     <div class="details description">
                       <p><strong>Relevant courses:</strong> Image and Signal processing, Virtual & Augmented Reality, Statistics, Object Oriented Coding, Database, Telecommunication, Operating Systems.</p>
                       <p><strong>Relevant Project:</strong> Built software to analyze a musician's playing using signal processing tools (Java).</p>
                     </div>
                 </div>
             </section>
+
+
 
             <section id="awards" class="animated-section">
                 <h2><i class="fa-solid fa-trophy fa-fw"></i> Awards & Distinctions</h2>
@@ -234,8 +258,8 @@
                         Used OpenAi's Gym to train agents to perform specific tasks (e.g. Land a rocket on the moon, or maintain a pole on a cart)</p>
                     </div>
                     <div class="project-screenshots">
-                        <img src="images/RL/LunarLander_ddqn.gif" alt="Lunar Lander trained with DDQN" class="zoomable-image project-image">
-                        <img src="images/RL/CartPole-v1_ddqn.gif" alt="CartPole trained with DDQN" class="zoomable-image project-image">
+                        <img src="images/RL/LunarLander_ddqn.gif" alt="Lunar Lander trained with DDQN" class="zoomable-image project-image" data-zoom="enhanced" data-caption="Lunar Lander agent successfully landing using DDQN algorithm.">
+                        <img src="images/RL/CartPole-v1_ddqn.gif" alt="CartPole trained with DDQN" class="zoomable-image project-image" data-zoom="enhanced" data-caption="CartPole agent balancing the pole using DDQN.">
                         <!-- Add more screenshots as needed -->
                     </div>
                     <div class="project-description skills-used"> <!-- Added class for specific styling -->
@@ -252,9 +276,9 @@
                         <p>Developed a local multiplayer adventure videogame about Ulysses Odyssey, using virtual and augmented reality technologies. A player using the HTC Vive headset plays Ulysse on a boat, and another using the CAVE technology (4 computers displaying 4 pannels) plays Poseidon.</p>
                     </div>
                     <div class="project-screenshots">
-                        <img src="images/VR/game.png" alt="VR Game Screenshot (Ulysse View)" class="zoomable-image project-image">
-                        <img src="images/VR/art.png" alt="VR Game Concept Art" class="zoomable-image project-image">
-                        <img src="images/VR/cave.jpg" alt="CAVE System Setup Photo" class="zoomable-image project-image">
+                        <img src="images/VR/game.png" alt="VR Game Screenshot (Ulysse View)" class="zoomable-image project-image" data-caption="View of the player using the HTC Vive">
+                        <img src="images/VR/art.png" alt="VR Game Concept Art" class="zoomable-image project-image" data-caption="Screenshot of a cinematic in the game">
+                        <img src="images/VR/cave.jpg" alt="CAVE System Setup Photo" class="zoomable-image project-image" data-caption="Photo of the CAVE technology">
                     </div>
                      <div class="project-description skills-used">
                       <p><strong>Skills:</strong> Unity, C#, HTC Vive, CAVE</p>
@@ -269,8 +293,8 @@
                         <p>Created a software to teach music theory on guitar and piano. The application analyze the playing of the user in real time and suggests corrections based on pitch and rhythm. Ability to create lessons.</p>
                     </div>
                     <div class="project-screenshots">
-                        <img src="images/music/analysis.png" alt="Music App - Chord Analysis Screenshot" class="zoomable-image project-image">
-                        <img src="images/music/lesson.png" alt="Music App - Lesson Editor Screenshot" class="zoomable-image project-image">
+                        <img src="images/music/analysis.png" alt="Music App - Chord Analysis Screenshot" class="zoomable-image project-image" data-caption="Algorithm detecting the peak frequencies for an E minor chord">
+                        <img src="images/music/lesson.png" alt="Music App - Lesson Editor Screenshot" class="zoomable-image project-image" data-caption="View of the lesson editor">
                     </div>
                     <div class="project-description skills-used">
                         <p><strong>Skills:</strong> Java, Real time Signal Processing, FFT, YIN frequency estimator</p>
@@ -329,9 +353,11 @@
     <!-- Lightbox Structure -->
     <div id="image-lightbox" class="lightbox">
       <span class="lightbox-close" title="Close (Esc)">×</span>
-      <img class="lightbox-content" id="lightbox-img" alt="Zoomed Image">
+      <div class="lightbox-inner-wrapper">
+          <img class="lightbox-content" id="lightbox-img" alt="Zoomed Image">
+          <div id="lightbox-caption"></div>
+      </div>
     </div>
-
     <div id="easter-egg-popup" class="popup-notification">
         <span class="popup-close" title="Close">×</span>
         <p>🎉 You've found the easter egg! 🎉</p>
@@ -400,36 +426,50 @@
         // ---- Lightbox Functionality ----
         const lightbox = document.getElementById('image-lightbox');
         const lightboxImg = document.getElementById('lightbox-img');
+        const lightboxCaption = document.getElementById('lightbox-caption');
         const lightboxClose = document.querySelector('.lightbox-close');
-        // Select images specifically marked for zooming (added .project-image class)
         const zoomableImages = document.querySelectorAll('.zoomable-image.project-image');
 
         zoomableImages.forEach(image => {
             image.addEventListener('click', (e) => {
-                lightbox.classList.add('active'); // Use class to show lightbox via CSS flex display
-                lightboxImg.src = e.target.src; // Set the src for the lightbox image
-                lightboxImg.alt = e.target.alt; // Copy alt text
+                const clickedImage = e.target;
+                const imgSrc = clickedImage.src;
+                const imgCaption = clickedImage.dataset.caption || clickedImage.alt || "";
+                const isEnhancedZoom = clickedImage.dataset.zoom === 'enhanced'; // Check for the data attribute
+
+                // Add or remove the enhanced zoom class on the lightbox container
+                if (isEnhancedZoom) {
+                    lightbox.classList.add('zoom-enhanced');
+                } else {
+                    lightbox.classList.remove('zoom-enhanced'); // Ensure it's removed for normal images
+                }
+
+                lightbox.classList.add('active'); // Show the lightbox
+                lightboxImg.src = imgSrc;
+                lightboxImg.alt = clickedImage.alt;
+                lightboxCaption.textContent = imgCaption;
             });
         });
 
         // Function to close lightbox
         const closeLightbox = () => {
             lightbox.classList.remove('active');
-            // Optional: Delay clearing src to avoid flash if background is transparent
+            lightbox.classList.remove('zoom-enhanced'); // ALWAYS remove enhanced class on close
+             // Optional: Delay clearing src/caption
              setTimeout(() => {
-                if (!lightbox.classList.contains('active')) { // Check if still closed
-                   lightboxImg.src = ""; // Clear src after transition
+                if (!lightbox.classList.contains('active')) {
+                   lightboxImg.src = "";
                    lightboxImg.alt = "";
+                   lightboxCaption.textContent = "";
                  }
-             }, 300); // Match CSS transition duration (adjust if needed)
+             }, 300);
         };
 
         // Close lightbox when clicking the close button
         lightboxClose.addEventListener('click', closeLightbox);
 
-        // Close lightbox when clicking on the background (outside the image)
+        // Close lightbox when clicking on the background
         lightbox.addEventListener('click', (e) => {
-            // Check if the click is directly on the lightbox background, not the image or close button
             if (e.target === lightbox) {
                 closeLightbox();
             }
