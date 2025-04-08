@@ -1305,13 +1305,68 @@ body.dark-mode #lightbox-caption {
         width: 0;
     }
 
+    .education-entry.edu-telecom .institution-location .institution-name {
+    font-size: 0.95em; /* Adjust this value as needed - try 0.9em, 0.85em, etc. */
+    /* You might also need to adjust line-height if it looks cramped */
+    /* line-height: 1.4; */
+}
+
+
+
 
     /* --- END: Advisor/Co-Advisor Stacking (Refined Alignment) --- */
+
+    #teaching .teaching-details {
+        /* Remove horizontal gap if elements are stacking */
+         /* gap: 0; */ /* You might not need this */
+         /* Consider changing flex alignment if needed */
+         /* align-items: flex-start; */
+    }
+
+    /* --- Force line break using the separator on mobile --- */
+    #teaching .teaching-details .info-separator {
+        content: "";        /* Ensure it's treated as an element */
+        display: block;     /* <<< Force onto a new line */
+        height: 0;          /* No visible height */
+        width: 100%;        /* Take up width to enforce block */
+        margin-top: 5px;    /* <<< Add space ABOVE the date line */
+        margin-bottom: 5px; /* <<< Optional: Add space AFTER the date line if needed */
+
+        /* Reset styles that might interfere from desktop view */
+        opacity: 1;
+        margin-left: 0;
+        margin-right: 0;
+        border: none; /* Ensure no accidental border is visible */
+        background: none; /* Ensure no accidental background */
+    }
+
+    /* Ensure icons and text still align reasonably on their respective lines */
+    #teaching .teaching-details i,
+    #teaching .teaching-details span:not(.info-separator) {
+         vertical-align: middle; /* Helps align icon and text on each line */
+         margin-bottom: 0; /* Remove bottom margin from individual items */
+    }
+
+    /* Adjust student names font size if needed */
+    #teaching .student-names {
+        font-size: 0.95em;
+    }
+
+    /* Adjust date font size if needed */
+    #teaching .teaching-date {
+        font-size: 0.85em;
+    }
+
+
+
 
 
     #research-interests .interests-list li { padding-left: 18px; }
     .skill-tag { padding: 6px 12px; font-size: 0.85em; }
     .project-image { max-width: 100%; } /* Stack images */
+
+
+
 
      #theme-toggle {
         width: 40px;
