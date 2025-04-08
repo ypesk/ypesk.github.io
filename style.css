@@ -5,6 +5,11 @@
     box-sizing: border-box;
 }
 
+html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 120px; /* Adjust this value based on your header height + buffer */
+}
+
 /* CSS Variables for Theming */
 :root {
     /* Light Mode - Enhanced Contrast & Polish */
@@ -69,10 +74,14 @@
     --dark-image-border-color: #444;
     --dark-image-shadow: 0 2px 5px rgba(255,255,255,0.05);
     --dark-image-hover-shadow: 0 5px 12px rgba(255,255,255,0.1);
-    --dark-entry-border-hover: var(--dark-accent-color); /* Accent color for entry hover border */
+    --dark-entry-border-hover: var(--dark-accent-color); /* Accent color for entry hover border
 
 
     /* Layout & Global */
+    --sidebar-width: 300px;
+    --content-gap: 35px;
+    --main-content-padding: 45px;
+
     --sidebar-width: 300px;
     --content-gap: 35px;
     --main-content-padding: 45px;
@@ -1069,6 +1078,241 @@ body.dark-mode #lightbox-caption {
     color: #fff;
     transform: scale(1.1);
 }
+
+
+
+/* --- Progress Navigation Sidebar --- */
+#progress-nav {
+    position: fixed;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 999;
+    display: block;
+    transition: opacity 0.3s ease, left 0.3s ease;
+    opacity: 0; /* Start hidden */
+}
+
+/* Add a class for when JS has positioned it */
+#progress-nav.positioned {
+    opacity: 1;
+}
+
+.progress-list {
+    list-style: none;
+    padding: 15px 0;
+    margin: 0;
+    position: relative;
+    padding: 10px 0;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.progress-list::before {
+    content: '';
+    position: absolute;
+    top: 15px;
+    bottom: 15px;
+    /* Adjust left position for true centering */
+    left: 14.5px; /* (16px center - 1.5px half-line-width) */
+    /* Or use 14px or 15px if half-pixels cause issues */
+    /* left: 15px; */
+    width: 3px; /* Slightly thicker line */
+    background-color: var(--border-color);
+    z-index: -1;
+    transition: background-color 0.3s ease;
+    transform: none; /* Ensure no transform interferes */
+}
+
+.progress-item {
+    margin-bottom: 20px;
+    position: relative;
+    display: flex; /* Keeps container aligned left */
+}
+.progress-item:last-child {
+    margin-bottom: 0;
+}
+
+/* NEW: Stable Hover Target - REMOVED excessive padding/margin */
+.dot-container {
+    position: relative;
+    cursor: pointer;
+    /* REMOVED: padding: 2px 220px 2px 2px; */
+    /* REMOVED: margin: -2px -220px -2px -2px; */
+    /* Optional: Add back minimal padding/margin if needed for visual spacing or slightly larger hit area */
+     padding: 2px; /* Small padding */
+     margin: -2px; /* Corresponding negative margin */
+     /* background-color: rgba(255, 0, 0, 0.1); /* Debugging hover area */
+}
+
+/* --- Dot Styling (<a> tag) --- */
+.progress-dot {
+    /* ... (keep existing styles like display, align-items, etc.) ... */
+    display: inline-flex;
+    align-items: center;
+    justify-content: flex-start; /* Keep flex-start */
+    vertical-align: top;
+    position: relative;
+    height: 32px;
+    max-width: 32px; /* Keep initial max-width */
+    border-radius: 16px; /* Circle */
+    overflow: hidden;
+    z-index: 1;
+    background-color: var(--container-bg);
+    border: 2px solid var(--secondary-text-color);
+    box-sizing: border-box; /* Keep box-sizing */
+
+    /* Keep transitions - max-width transition is crucial */
+    transition: background-color 0.3s ease,
+                border-color 0.3s ease,
+                border-radius 0.3s ease,
+                max-width 0.35s cubic-bezier(0.25,0.1,0.25,1);
+}
+
+
+/* Icon inside the dot */
+/* ... (keep existing icon styles) ... */
+.progress-dot i {
+    font-size: 15px;
+    color: var(--secondary-text-color);
+    flex-shrink: 0;
+    line-height: 1;
+    z-index: 2;
+    margin-left: 5px; /* Adjust this value */
+    margin-right: 8px; /* Adjust this value */
+    transition: color 0.3s ease-in-out,
+                margin-left 0.3s ease-in-out,
+                margin-right 0.3s ease-in-out;
+}
+
+/* Text Label inside the dot */
+/* ... (keep existing label styles) ... */
+.dot-label {
+    font-size: 0.95em;
+    font-weight: 600;
+    color: var(--text-color);
+    white-space: nowrap;
+    padding-left: 0px;  /* Keep 0 */
+    padding-right: 15px; /* Padding at end */
+    z-index: 2;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.2s ease-in-out 0.05s,
+                visibility 0.2s ease-in-out 0.05s,
+                color 0.3s ease-in-out;
+}
+
+
+/* --- Hover State (Triggered by PARENT .dot-container) --- */
+.dot-container:hover .progress-dot {
+    /* Keep existing hover styles */
+    justify-content: flex-start;
+    width: fit-content;
+    max-width: 240px; /* Keep expanded max width */
+    border-radius: 16px;
+    overflow: hidden;
+    border-color: var(--link-hover-color);
+    background-color: var(--accent-color-light);
+}
+
+.dot-container:hover .progress-dot i {
+     /* Keep existing hover icon styles */
+    color: var(--link-hover-color);
+}
+
+.dot-container:hover .progress-dot .dot-label {
+     /* Keep existing hover label styles */
+    opacity: 1;
+    visibility: visible;
+    max-width: 200px;
+    color: var(--link-hover-color);
+}
+body.dark-mode .dot-container:hover .progress-dot .dot-label {
+    color: var(--dark-link-hover-color);
+}
+
+
+/* --- Active State --- */
+.progress-dot.active {
+    /* REMOVED max-width: 32px; <<< FIX FOR ANIMATION BUG */
+    border-radius: 16px; /* Circle */
+    /* Active Colors */
+    border-color: var(--accent-color);
+    background-color: var(--accent-color);
+    /* The base .progress-dot rule already sets the default max-width: 32px */
+}
+
+/* Ensure label stays hidden in active state unless also hovered */
+.progress-dot.active .dot-label {
+    /* Keep existing rules */
+}
+
+.progress-dot.active i {
+    /* Keep existing rules */
+    color: var(--container-bg);
+}
+body.dark-mode .progress-dot.active i {
+     color: #f0f0f0;
+}
+
+/* --- Active + Hover State (Triggered by PARENT .dot-container) --- */
+.dot-container:hover .progress-dot.active {
+     /* Keep existing active+hover styles */
+     justify-content: flex-start;
+     width: fit-content;
+     max-width: 240px;
+     border-radius: 16px; /* Capsule */
+     border-color: var(--accent-color);
+     background-color: var(--accent-color);
+}
+
+.dot-container:hover .progress-dot.active i {
+    /* Keep existing active+hover icon styles */
+    color: var(--container-bg);
+}
+body.dark-mode .dot-container:hover .progress-dot.active i {
+    color: #f0f0f0;
+}
+
+.dot-container:hover .progress-dot.active .dot-label {
+    /* Keep existing active+hover label styles */
+    opacity: 1;
+    visibility: visible;
+    max-width: 200px;
+    color: var(--container-bg);
+}
+body.dark-mode .dot-container:hover .progress-dot.active .dot-label {
+     color: #f0f0f0;
+}
+
+
+/* --- Responsive Adjustments --- */
+
+/* Hide progress nav on smaller screens (no change needed here) */
+@media (max-width: 850px) {
+  #progress-nav {
+      display: none !important; /* Ensure it stays hidden */
+      opacity: 0; /* Keep it invisible */
+  }    /* Other 850px styles */
+}
+
+/* (Keep other media queries as they were) */
+
+/* --- Ensure scroll-padding is still set on html --- */
+html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 120px; /* Keep this value */
+}
+
+/* Adjust right padding if needed on slightly larger screens */
+@media (max-width: 1100px) {
+  :root {
+      --sidebar-width: 270px;
+      --content-gap: 30px;
+      --main-content-padding: 40px;
+  }
+}
+
 
 /* --- Responsive Design Adjustments --- */
 
