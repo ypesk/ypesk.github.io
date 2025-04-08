@@ -467,112 +467,106 @@ a:hover {
     font-size: 0.85em;
 }
 
-.education-entry {
-    /* Ensure the entry itself creates a positioning context */
-    position: relative;
-    /* Ensure content is layered above the pseudo-element */
-    z-index: 1;
-     /* Optional: If logo overflows, hide it. Remove if causing issues. */
-    overflow: hidden;
+
+
+.education-entry .thesis-title strong {
+    color: var(--text-color); /* Keep "Thesis:" label the default text color */
+    font-weight: 600; /* Keep "Thesis:" label standard bold */
 }
 
-/* Common styles for the background pseudo-element */
-.education-entry::before {
-    content: ""; /* Required for pseudo-elements */
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-repeat: no-repeat;
-    /* Center the background image */
-    background-position: center center; /* Changed */
-    /* Scale the image to fit without cropping */
-    background-size: contain; /* Changed */
-    /* Adjust opacity for desired "softness" - reduced slightly */
-    opacity: 0.15; /* Adjusted */
-    /* Place the pseudo-element behind the content */
-    z-index: -1;
-    /* Make it non-interactive */
-    pointer-events: none;
-     /* Smooth transition if you ever change logos/opacity */
-    transition: opacity 0.3s ease, background-image 0.3s ease;
+.education-entry .thesis-title span.title-text { /* Requires wrapping title in <span class="title-text">...</span> */
+    color: var(--accent-color);
+    font-weight: 700;
 }
 
-/* Specific logos, positions, and sizes */
-.edu-sorbonne-eurecom::before {
-    /* Multiple backgrounds: image1, image2 */
-    background-image:url('images/sorbonne.png');
-    /* Position: position for image1, position for image2 */
-    /* Positions logos in the top-right corner, stacked vertically */
+
+/* Ensure existing rules don't conflict - this existing rule is fine */
+.education-entry .details {
+    font-size: 0.98em;
+    color: var(--accent-color); /* Base color for other details */
+    margin-top: 8px;
+    line-height: 1.6;
 }
 
-.edu-polytechnique::before {
-    background-image: url('images/polytechnique-montreal.png');
-    /* Position logo in the top-right corner */
-}
-
-.edu-telecom::before {
-    background-image: url('images/ipparis.png');
-    /* Position logo in the top-right corner */
-}
-
-/* Optional: Slightly dim the logo in dark mode if needed */
-body.dark-mode .education-entry::before {
-    opacity: 0.1; /* Further reduce opacity for dark mode */
+/* This existing rule styles the <strong> tags within .details */
+.details strong {
+    color: var(--text-color); /* Base color for strong elements */
+    font-weight: 600; /* Standard bold */
 }
 
 /* Education & Project Entry Styling */
 .education-entry, .project-entry {
+    /* ... (keep existing styles) ... */
     margin-bottom: 30px;
     padding-left: 20px;
     border-left: 4px solid var(--accent-color-light);
     transition: var(--entry-border-transition);
     position: relative;
+     /* Ensure these have position:relative for ::before */
+    overflow: hidden; /* Keep this if you want backgrounds clipped */
+    z-index: 1; /* Keep this */
 }
 .education-entry:hover, .project-entry:hover {
     border-left-color: var(--entry-border-hover);
 }
 
 .education-entry h3, .project-entry h3 {
+    /* ... (keep existing styles) ... */
     font-size: 1.35em;
-    margin-bottom: 8px;
+    margin-bottom: 8px; /* Reduced slightly */
     color: var(--header-color);
     font-family: 'Montserrat', sans-serif;
 }
+
 .project-entry h3 {
      font-size: 1.25em;
      margin-bottom: 10px;
 }
 
-/* Institution/Location/Dates alignment */
-.institution-location, .dates {
+.institution-location {
     font-size: 1em;
-    margin-bottom: 8px;
+    margin-bottom: 10px;
     display: flex;
     align-items: center;
+    flex-wrap: wrap;
+    /* Keep the gap for general spacing between items */
+    gap: 0 8px;
     color: var(--secondary-text-color);
 }
-.institution-location i, .dates i {
-    margin-right: 10px;
+
+.institution-location i {
     color: var(--accent-color);
     width: 16px;
     text-align: center;
     flex-shrink: 0;
+    /* Remove default right margin, rely on gap */
+    margin-right: 0;
+    /* Remove default left margin as well */
+    margin-left: 0;
 }
+
+/* Specific icon adjustments (if needed - remove large left margin) */
 .institution-location .location-icon {
-    color: var(--accent-color);
-    width: 16px;
-    text-align: center;
-    margin-left: 18px;
-    margin-right: 6px;
+     margin-left: 8px; /* Reduced left margin */
 }
-.institution-location .institution-name {
+.institution-location .date-icon {
+    /* margin-left: 0; /* Explicitly setting 0 if needed, but base rule handles it */
+}
+
+.institution-location .institution-icon {
+     margin-left: 8px; /* Adjust value as needed for visual balance with gap */
+}
+
+/* Style the institution name */
+.institution-location .institution-name, .institution-location .date-text {
     font-weight: 600;
     color: var(--text-color);
-    margin-right: 5px;
+    /* margin-right: 5px; Removed, using gap now */
 }
+
+/* Hide original separators (if they were visible) */
 .location-separator, .details-separator { display: none; }
+
 
 .education-entry .details {
     font-size: 0.98em;
@@ -864,51 +858,118 @@ body.dark-mode #theme-toggle .icon-light { display: inline-block; transform: rot
 
 /* --- Lightbox Styles --- */
 .lightbox {
-    display: none;
+    display: none; /* Changed back to none initially */
     position: fixed;
     z-index: 1001;
-    padding: 50px 20px 20px 20px;
+    padding: 20px; /* Reduced overall padding slightly */
     left: 0;
     top: 0;
     width: 100%;
     height: 100%;
-    overflow: auto;
+    overflow: auto; /* Allow scrolling if wrapper is too big */
     background-color: rgba(0, 0, 0, 0.9);
     opacity: 0;
     transition: opacity 0.3s ease;
+    /* Flexbox to center the inner wrapper */
     align-items: center;
     justify-content: center;
 }
+
 .lightbox.active {
-    display: flex;
+    display: flex; /* Use flex to enable centering */
     opacity: 1;
 }
-.lightbox-content {
+
+/* Wrapper for image and caption */
+.lightbox-inner-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    max-width: 95%;
+    max-height: 95%;
     margin: auto;
-    display: block;
-    max-width: 90%;
-    max-height: 90%;
-    animation: lightboxZoom 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    object-fit: contain;
-    border-radius: 4px;
+    position: relative;
+    padding-top: 35px;
+    /* REVERT: Remove or reduce padding-bottom */
+    padding-bottom: 10px; /* Small default padding if desired */
+    box-sizing: border-box;
+    /* REVERT: Remove padding-bottom from transition */
+    transition: max-width 0.3s ease, max-height 0.3s ease;
+    animation: lightboxZoom 0.4s ease-out;
 }
 
+/* Make WRAPPER bigger when zoom is enhanced */
+/* REMOVE padding-bottom specific rule here */
+.lightbox.zoom-enhanced .lightbox-inner-wrapper {
+    max-width: 98vw;
+    max-height: 98vh;
+    /* REMOVED: padding-bottom: 60px; */
+}
+
+/* --- MODIFY THIS RULE --- */
+/* Apply scaling transform AND margin-bottom to the IMAGE when zoom is enhanced */
+.lightbox.zoom-enhanced .lightbox-content {
+     transform: scale(1.15);
+     /* ADD margin-bottom - Adjust this value! */
+     margin-bottom: 50px;
+}
+
+/* --- MODIFY THIS RULE --- */
+.lightbox-content {
+    max-width: 100%;
+    max-height: calc(95vh - 100px);
+    object-fit: contain;
+    border-radius: 4px;
+    transform: scale(1);
+    /* ADD default margin-bottom */
+    margin-bottom: 0; /* Or a small default like 5px */
+    /* ADD margin-bottom to transition */
+    transition: transform 0.3s ease, margin-bottom 0.3s ease;
+}
+
+
+#lightbox-caption {
+    text-align: center;
+    color: #333;
+    padding: 10px 15px;
+    margin-top: 12px; /* Keep small top margin */
+    font-size: 0.95em;
+    line-height: 1.5;
+    max-width: 90%;
+    transition: opacity 0.3s ease, background-color 0.3s ease, color 0.3s ease;
+    opacity: 1;
+    background-color: rgba(250, 250, 250, 0.85);
+    border-radius: 6px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.5);
+    box-sizing: border-box;
+    flex-shrink: 0;
+}
+
+/* Dark Mode Adjustment for Caption Box */
+body.dark-mode #lightbox-caption {
+    background-color: rgba(40, 40, 40, 0.85);
+    color: #eee;
+}
+
+/* Keyframes and Close button rules remain the same */
 @keyframes lightboxZoom {
-    from {transform: scale(0.7); opacity: 0;}
-    to {transform: scale(1); opacity: 1;}
+    from { opacity: 0; transform: scale(0.85)}
+    to { opacity: 1; transform: scale(1.0);}
 }
 
 .lightbox-close {
     position: absolute;
-    top: 20px;
-    right: 30px;
+    top: 15px;
+    right: 25px;
     color: #ccc;
-    font-size: 45px;
+    font-size: 40px;
     font-weight: bold;
     transition: 0.3s ease;
     cursor: pointer;
     line-height: 1;
     text-shadow: 0 1px 3px rgba(0,0,0,0.5);
+    z-index: 1002;
 }
 .lightbox-close:hover,
 .lightbox-close:focus {
