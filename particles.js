@@ -7,6 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const ctx = canvas.getContext('2d');
 
     let particles = [];
+    let activeWaves = [];
     let animationFrameId;
     let currentTheme = document.body.classList.contains('dark-mode') ? 'dark' : 'light';
 
@@ -18,16 +19,26 @@ document.addEventListener('DOMContentLoaded', () => {
         particleRadius: 4,       // Size of particles
         lineWidth: 0.8,          // Thickness of connecting lines
         mouseRadius: 200,        // Radius around mouse to interact/draw lines
+
         mouseRepelRadius: 150,   // Radius within which mouse pushes particles
         mouseRepelStrength: 0.1, // How strong the push is (adjust sensitivity)
+
+        waveOnClick: true,       // Enable/disable the wave effect easily
+        waveMaxRadius: 80,       // Should ideally match mouseRepelRadius
+        waveDurationFrames: 90,  // How long the wave lasts in animation frames (e.g., 60 frames = 1 second at 60fps)
+        waveInitialLineWidth: 1, // Starting thickness of the wave circle
+        waveFadeOut: true,       // Whether the wave fades as it expands
+
         themeColors: {
             light: {
                 particleColor: 'rgba(44, 62, 80, 0.7)',   // --header-color slightly transparent
                 lineColor: 'rgba(44, 62, 80, 0.2)',      // --header-color more transparent
+                waveColor: 'rgba(0, 86, 179, 0.15)',
             },
             dark: {
                 particleColor: 'rgba(224, 224, 224, 0.6)', // --dark-text-color slightly transparent
-                lineColor: 'rgba(224, 224, 224, 0.15)',   // --dark-text-color more transparent
+                lineColor: 'rgba(224, 224, 224, 0.15)',   // --dark-text-color more
+                waveColor: 'rgba(121, 184, 255, 0.15)', // e.g., --dark-link-color with alpha
             }
         }
     };
@@ -173,6 +184,44 @@ document.addEventListener('DOMContentLoaded', () => {
         // Clear canvas
         ctx.clearRect(0, 0, canvas.width, canvas.height);
 
+        if (config.waveOnClick) {
+            const themeWaveColor = getThemeColors().waveColor; // Get base color for theme
+            const waveBaseRGB = themeWaveColor.match(/\d+/g).slice(0, 3).join(', '); // Extract "r, g, b"
+            const waveBaseAlpha = parseFloat(themeWaveColor.match(/[\d\.]+/g)[3] || 1); // Extract base alpha
+
+            // Use filter to update and remove finished waves cleanly
+            activeWaves = activeWaves.filter(wave => {
+                // Update wave
+                wave.currentRadius += (wave.maxRadius / wave.initialLife); // Expand to maxRadius over its life
+                wave.life--;
+
+                // Check if wave is still alive
+                if (wave.life > 0 && wave.currentRadius < wave.maxRadius * 1.1) { // Allow slight overshoot
+
+                    // Calculate appearance based on life
+                    const progress = 1 - (wave.life / wave.initialLife); // 0 = start, 1 = end
+                    const opacity = config.waveFadeOut ? (1 - progress) * waveBaseAlpha : waveBaseAlpha;
+                    // Make line thinner as it expands (optional)
+                    const lineWidth = wave.initialLineWidth * (1 - progress);
+
+                    if (lineWidth <= 0 || opacity <= 0) {
+                         return false; // Wave is effectively dead
+                    }
+
+                    // Draw the wave
+                    ctx.beginPath();
+                    ctx.arc(wave.x, wave.y, wave.currentRadius, 0, Math.PI * 2);
+                    ctx.strokeStyle = `rgba(${waveBaseRGB}, ${opacity})`;
+                    ctx.lineWidth = lineWidth;
+                    ctx.stroke();
+
+                    return true; // Keep wave
+                } else {
+                    return false; // Remove wave
+                }
+            });
+        }
+
         // Update and draw particles
         particles.forEach(p => {
             p.update();
@@ -235,10 +284,26 @@ document.addEventListener('DOMContentLoaded', () => {
         isMouseDown = false;
     });
 
-    window.addEventListener('mousedown', () => {
-      isMouseDown = true;
-      updateMousePosition(event); // Ensure position is correct on click start
-    });
+
+    window.addEventListener('mousedown', (event) => {
+          isMouseDown = true;
+          updateMousePosition(event); // Keep this to update position
+
+          // --- CREATE WAVE ON CLICK ---
+          if (config.waveOnClick && mouse.x !== null && mouse.y !== null) {
+              activeWaves.push({
+                  x: mouse.x,                 // Start at current mouse coordinates
+                  y: mouse.y,
+                  currentRadius: 0,           // Start with radius 0
+                  maxRadius: config.mouseRepelRadius,
+                  life: config.waveDurationFrames, // Countdown timer
+                  initialLife: config.waveDurationFrames, // Store initial for fade calculation
+                  initialLineWidth: config.waveInitialLineWidth
+              });
+          }
+          // --- END CREATE WAVE ---
+      });
+
 
     window.addEventListener('mouseup', () => {
         isMouseDown = false; // Reset flag when mouse button is released
