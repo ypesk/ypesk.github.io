@@ -658,6 +658,99 @@ a:hover {
     flex-shrink: 0;
 }
 
+
+/* --- Teaching Section --- */
+#teaching .teaching-intro {
+    font-size: 1.05em;
+    line-height: 1.7;
+    margin-bottom: 25px; /* Space before the list */
+    color: var(--secondary-text-color); /* Slightly less prominent than main text */
+    text-align: justify; /* Optional: Justify intro text */
+}
+
+#teaching .teaching-list {
+    list-style: none;
+    padding-left: 0; /* Remove default ul padding */
+}
+
+#teaching .teaching-list li {
+  margin-bottom: 25px; /* Space between teaching items */
+  padding-left: 20px; /* Space for border, matching other entries */
+  border-left: 4px solid var(--accent-color-light); /* Consistent border style */
+  transition: var(--entry-border-transition); /* Consistent hover transition */
+  position: relative;
+}
+#teaching .teaching-list li:last-child {
+    margin-bottom: 0; /* Remove margin from last item */
+}
+
+#teaching .teaching-list li:hover {
+    border-left-color: var(--entry-border-hover); /* Consistent hover effect */
+}
+
+/* Styling for the spans inside each list item */
+#teaching .teaching-list span {
+    display: block; /* Stack them vertically */
+    margin-bottom: 6px; /* Space between spans */
+    line-height: 1.5;
+}
+#teaching .teaching-list span:last-child {
+    margin-bottom: 0; /* No margin after the last span in an item */
+}
+
+#teaching .teaching-title {
+    display: block; /* Ensure it's on its own line */
+    font-size: 1.05em; /* Or 1em - your previous choice */
+    font-weight: 700;
+    color: var(--header-color);
+    margin-bottom: 10px; /* Add space below the title */
+}
+
+/* NEW: Style the container for details (icons, names, date) */
+#teaching .teaching-details {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap; /* Allow wrapping on small screens */
+    gap: 0 8px; /* Horizontal gap between items */
+    /* No vertical gap needed if wrapping puts items on new lines */
+    margin-bottom: 6px; /* Reset bottom margin for spans inside */
+}
+
+/* NEW: Style the icons within the details container */
+#teaching .teaching-details i {
+    color: var(--accent-color);
+    width: 16px; /* Match education icon width */
+    text-align: center;
+    flex-shrink: 0; /* Prevent icons from shrinking */
+    margin-right: 0; /* Use gap for spacing */
+}
+
+/* Adjust student names styling (remove margin-bottom as container handles it) */
+#teaching .student-names {
+    font-size: 1em;
+    font-weight: 400; /* Normal weight */
+    color: var(--text-color);
+    display: inline-block; /* Align properly in flex */
+    margin-bottom: 0; /* Remove margin */
+}
+
+/* Adjust date styling (remove margin-bottom) */
+#teaching .teaching-date {
+    font-size: 0.9em;
+    color: var(--secondary-text-color);
+    font-style: italic;
+    display: inline-block; /* Align properly in flex */
+    margin-bottom: 0; /* Remove margin */
+}
+
+/* Hide the info separator visually (it's mainly for structure/mobile) */
+#teaching .teaching-details .info-separator {
+    display: inline-block; /* Keep it in the flow */
+    width: 1px;            /* Make it very small */
+    opacity: 0;            /* Make it invisible */
+    margin: 0 4px;         /* Add a little space around it if needed */
+}
+
 /* Project Section Specifics */
 .project-description {
     margin-bottom: 15px;
