@@ -97,6 +97,7 @@ body {
     overflow-x: hidden;
 }
 
+
 body.dark-mode {
     --bg-color: var(--dark-bg-color);
     --text-color: var(--dark-text-color);
@@ -250,6 +251,21 @@ body.dark-mode {
     color: var(--accent-color); /* Icon color still uses accent color */
     transition: color 0.2s ease;
 }
+
+
+.sidebar .contact-list li:hover {
+/* Optional background change */
+/* background-color: var(--accent-color-light); */
+transform: translateX(3px); /* Subtle shift */
+/* Ensure the link inside still gets its hover style */
+}
+/* Ensure transitions are defined on the base element */
+.sidebar .contact-list li,
+.sidebar .languages-list li {
+transition: var(--global-transition), transform 0.2s ease-out; /* Add transform */
+}
+
+
 
 /* Override general sidebar link hover (if any conflicting) and set specific color */
 .sidebar .contact-list li a:hover {
@@ -451,6 +467,60 @@ a:hover {
     font-size: 0.85em;
 }
 
+.education-entry {
+    /* Ensure the entry itself creates a positioning context */
+    position: relative;
+    /* Ensure content is layered above the pseudo-element */
+    z-index: 1;
+     /* Optional: If logo overflows, hide it. Remove if causing issues. */
+    overflow: hidden;
+}
+
+/* Common styles for the background pseudo-element */
+.education-entry::before {
+    content: ""; /* Required for pseudo-elements */
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-repeat: no-repeat;
+    /* Center the background image */
+    background-position: center center; /* Changed */
+    /* Scale the image to fit without cropping */
+    background-size: contain; /* Changed */
+    /* Adjust opacity for desired "softness" - reduced slightly */
+    opacity: 0.15; /* Adjusted */
+    /* Place the pseudo-element behind the content */
+    z-index: -1;
+    /* Make it non-interactive */
+    pointer-events: none;
+     /* Smooth transition if you ever change logos/opacity */
+    transition: opacity 0.3s ease, background-image 0.3s ease;
+}
+
+/* Specific logos, positions, and sizes */
+.edu-sorbonne-eurecom::before {
+    /* Multiple backgrounds: image1, image2 */
+    background-image:url('images/sorbonne.png');
+    /* Position: position for image1, position for image2 */
+    /* Positions logos in the top-right corner, stacked vertically */
+}
+
+.edu-polytechnique::before {
+    background-image: url('images/polytechnique-montreal.png');
+    /* Position logo in the top-right corner */
+}
+
+.edu-telecom::before {
+    background-image: url('images/ipparis.png');
+    /* Position logo in the top-right corner */
+}
+
+/* Optional: Slightly dim the logo in dark mode if needed */
+body.dark-mode .education-entry::before {
+    opacity: 0.1; /* Further reduce opacity for dark mode */
+}
 
 /* Education & Project Entry Styling */
 .education-entry, .project-entry {
