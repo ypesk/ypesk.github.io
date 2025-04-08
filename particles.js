@@ -12,7 +12,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- Configuration ---
     const config = {
-        particleCount: 80,       // Number of particles
+        particleCount: 120,       // Number of particles
         maxDistance: 250,        // Max distance to draw a line
         particleSpeed: 0.3,      // Max speed of particles
         particleRadius: 4,       // Size of particles
