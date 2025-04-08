@@ -18,6 +18,8 @@ document.addEventListener('DOMContentLoaded', () => {
         particleRadius: 4,       // Size of particles
         lineWidth: 0.8,          // Thickness of connecting lines
         mouseRadius: 200,        // Radius around mouse to interact/draw lines
+        mouseRepelRadius: 150,   // Radius within which mouse pushes particles
+        mouseRepelStrength: 0.1, // How strong the push is (adjust sensitivity)
         themeColors: {
             light: {
                 particleColor: 'rgba(44, 62, 80, 0.7)',   // --header-color slightly transparent
@@ -34,6 +36,7 @@ document.addEventListener('DOMContentLoaded', () => {
         x: null,
         y: null
     };
+    let isMouseDown = false;
 
     // --- Helper Functions ---
     function getThemeColors() {
@@ -66,6 +69,31 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         update() {
+          if (isMouseDown && mouse.x !== null && mouse.y !== null) { // <<< ADDED 'isMouseDown &&' condition
+
+            const dxMouse = this.x - mouse.x;
+            const dyMouse = this.y - mouse.y;
+            const distanceMouse = Math.sqrt(dxMouse * dxMouse + dyMouse * dyMouse);
+
+            // Check if mouse is within repel radius
+            if (distanceMouse < config.mouseRepelRadius) {
+                // Calculate force: Stronger when closer, fades to zero at the edge
+                const forceDirectionX = dxMouse / distanceMouse; // Unit vector x
+                const forceDirectionY = dyMouse / distanceMouse; // Unit vector y
+
+                // Force magnitude decreases linearly from max strength to 0
+                const forceMagnitude = (1 - distanceMouse / config.mouseRepelRadius) * config.mouseRepelStrength;
+
+                // Apply force to velocity (pushing away)
+                this.vx += forceDirectionX * forceMagnitude;
+                this.vy += forceDirectionY * forceMagnitude;
+
+                // Optional: Add a slight velocity cap to prevent extreme speeds
+                const maxSpeed = config.particleSpeed * 3; // e.g., limit to 3x base speed
+                this.vx = Math.max(-maxSpeed, Math.min(maxSpeed, this.vx));
+                this.vy = Math.max(-maxSpeed, Math.min(maxSpeed, this.vy));
+            }
+        }
             // Movement
             this.x += this.vx;
             this.y += this.vy;
@@ -98,6 +126,8 @@ document.addEventListener('DOMContentLoaded', () => {
     function connectParticles() {
         const colors = getThemeColors();
         ctx.lineWidth = config.lineWidth;
+
+
 
         for (let i = 0; i < particles.length; i++) {
             // Connect particles to each other
@@ -175,6 +205,19 @@ document.addEventListener('DOMContentLoaded', () => {
         init(); // Reinitialize canvas and particles
     }
 
+    function updateMousePosition(event) {
+        // Get the bounding rectangle of the canvas
+        const rect = canvas.getBoundingClientRect();
+
+        // Calculate the scale difference between canvas internal size and display size
+        const scaleX = canvas.width / rect.width;
+        const scaleY = canvas.height / rect.height;
+
+        // Calculate mouse position relative to the canvas, scaled correctly
+        mouse.x = (event.clientX - rect.left) * scaleX;
+        mouse.y = (event.clientY - rect.top) * scaleY;
+    }
+
     // Debounce resize handler for performance
     let resizeTimeout;
     window.addEventListener('resize', () => {
@@ -183,13 +226,22 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     window.addEventListener('mousemove', (event) => {
-        mouse.x = event.clientX;
-        mouse.y = event.clientY;
+        updateMousePosition(event); // Update position on move
     });
 
     window.addEventListener('mouseout', () => {
         mouse.x = null;
         mouse.y = null;
+        isMouseDown = false;
+    });
+
+    window.addEventListener('mousedown', () => {
+      isMouseDown = true;
+      updateMousePosition(event); // Ensure position is correct on click start
+    });
+
+    window.addEventListener('mouseup', () => {
+        isMouseDown = false; // Reset flag when mouse button is released
     });
 
      // --- Theme Change Handling ---
