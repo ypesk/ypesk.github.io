@@ -141,6 +141,8 @@ body.dark-mode {
     align-items: start;
 }
 
+
+
 /* Sidebar Styling */
 .sidebar {
     background-color: var(--sidebar-bg);
