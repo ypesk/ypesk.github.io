@@ -617,7 +617,7 @@ a:hover {
     justify-content: center; /* ADDED: Center images horizontally */
 }
 .project-image {
-    max-width: 200px;
+    max-width: 400px;
     width: 100%;
     height: auto;
     border: 1px solid var(--image-border-color);
