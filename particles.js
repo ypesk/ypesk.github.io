@@ -1,3 +1,6 @@
+let easterEggParticleFound = false; // Optional: Prevent multiple triggers if desired
+let popupTimeoutId = null; // To manage auto-hiding
+
 document.addEventListener('DOMContentLoaded', () => {
     const canvas = document.getElementById('particle-canvas');
     if (!canvas) {
@@ -5,6 +8,7 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
     }
     const ctx = canvas.getContext('2d');
+
 
     let particles = [];
     let activeWaves = [];
@@ -29,16 +33,21 @@ document.addEventListener('DOMContentLoaded', () => {
         waveInitialLineWidth: 1, // Starting thickness of the wave circle
         waveFadeOut: true,       // Whether the wave fades as it expands
 
+        enableEasterEgg: true,      // Master switch
+        easterEggAlwaysFirst: false, // For testing: true = particle[0] is egg, false = random
+
         themeColors: {
             light: {
                 particleColor: 'rgba(44, 62, 80, 0.7)',   // --header-color slightly transparent
                 lineColor: 'rgba(44, 62, 80, 0.2)',      // --header-color more transparent
                 waveColor: 'rgba(0, 86, 179, 0.15)',
+                easterEggColor: 'rgba(227, 100, 20, 0.9)' // Example: Orange
             },
             dark: {
                 particleColor: 'rgba(224, 224, 224, 0.6)', // --dark-text-color slightly transparent
                 lineColor: 'rgba(224, 224, 224, 0.15)',   // --dark-text-color more
                 waveColor: 'rgba(121, 184, 255, 0.15)', // e.g., --dark-link-color with alpha
+                easterEggColor: 'rgba(255, 165, 0, 0.9)' // Example: Brighter Orange for dark mode
             }
         }
     };
@@ -69,13 +78,23 @@ document.addEventListener('DOMContentLoaded', () => {
             // Ensure particles are not completely static
             if (this.vx === 0) this.vx = 0.1;
             if (this.vy === 0) this.vy = 0.1;
+            this.isEasterEgg = false; //
         }
 
         draw() {
             const colors = getThemeColors();
+
+            let fillColor; // <<< Use a variable for color
+
+            // <<< CHECK FOR EASTER EGG >>>
+            if (this.isEasterEgg && config.enableEasterEgg) {
+                fillColor = colors.easterEggColor;
+            } else {
+                fillColor = colors.particleColor;
+            }
             ctx.beginPath();
             ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-            ctx.fillStyle = colors.particleColor;
+            ctx.fillStyle = fillColor;
             ctx.fill();
         }
 
@@ -128,8 +147,21 @@ document.addEventListener('DOMContentLoaded', () => {
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
         particles = []; // Clear existing particles
+        easterEggParticleFound = false; // Reset found status on init
+
         for (let i = 0; i < config.particleCount; i++) {
             particles.push(new Particle());
+        }
+
+        if (config.enableEasterEgg && particles.length > 0) {
+            let eggIndex = 0; // Default to first
+            if (!config.easterEggAlwaysFirst) {
+                eggIndex = Math.floor(Math.random() * particles.length);
+            }
+             // Ensure index is valid just in case
+            eggIndex = Math.max(0, Math.min(particles.length - 1, eggIndex));
+            particles[eggIndex].isEasterEgg = true;
+            // console.log(`Particle ${eggIndex} is the easter egg.`); // Debug
         }
         startAnimation(); // Start animation after init
     }
@@ -267,6 +299,40 @@ document.addEventListener('DOMContentLoaded', () => {
         mouse.y = (event.clientY - rect.top) * scaleY;
     }
 
+    const popupElement = document.getElementById('easter-egg-popup');
+    const popupCloseButton = popupElement ? popupElement.querySelector('.popup-close') : null;
+
+    function showEasterEggPopup() {
+      if (!popupElement) return;
+
+      // Clear any existing timeout to prevent conflicts if clicked again quickly
+      if (popupTimeoutId) {
+          clearTimeout(popupTimeoutId);
+      }
+
+      popupElement.classList.add('visible');
+
+      // Auto-hide after a few seconds
+      popupTimeoutId = setTimeout(() => {
+           hideEasterEggPopup();
+      }, 4000); // Hide after 4 seconds (adjust as needed)
+    }
+
+    function hideEasterEggPopup() {
+       if (!popupElement) return;
+       if (popupTimeoutId) { // Clear timeout if hidden manually
+          clearTimeout(popupTimeoutId);
+          popupTimeoutId = null;
+       }
+       popupElement.classList.remove('visible');
+    }
+
+    // Add close button listener if element exists
+    if (popupCloseButton) {
+      popupCloseButton.addEventListener('click', hideEasterEggPopup);
+    }
+
+
     // Debounce resize handler for performance
     let resizeTimeout;
     window.addEventListener('resize', () => {
@@ -289,9 +355,32 @@ document.addEventListener('DOMContentLoaded', () => {
           isMouseDown = true;
           updateMousePosition(event); // Keep this to update position
 
-          // --- CREATE WAVE ON CLICK ---
-          if (config.waveOnClick && mouse.x !== null && mouse.y !== null) {
-              activeWaves.push({
+          let clickedOnEgg = false;
+          if (config.enableEasterEgg && mouse.x !== null && mouse.y !== null) {
+               for (let i = 0; i < particles.length; i++) {
+                  const p = particles[i];
+                  const dxClick = mouse.x - p.x;
+                  const dyClick = mouse.y - p.y;
+                  const distanceClick = Math.sqrt(dxClick * dxClick + dyClick * dyClick);
+
+                  // Check if click is within particle radius
+                  if (distanceClick < p.radius) {
+                      // console.log(`Clicked on particle ${i}`); // Debug
+                      if (p.isEasterEgg) {
+                          // console.log("Clicked on the EASTER EGG!"); // Debug
+                          showEasterEggPopup();
+                          easterEggParticleFound = true; // Set flag
+                          clickedOnEgg = true;
+                          break; // Stop checking other particles
+                      }
+                       // Optional: Handle clicks on non-egg particles if needed
+                       // break; // Uncomment if you only want the first clicked particle to register
+                  }
+              }
+          }
+
+        if (config.waveOnClick && !clickedOnEgg && mouse.x !== null && mouse.y !== null) { // Added !clickedOnEgg condition
+                  activeWaves.push({
                   x: mouse.x,                 // Start at current mouse coordinates
                   y: mouse.y,
                   currentRadius: 0,           // Start with radius 0
@@ -301,13 +390,14 @@ document.addEventListener('DOMContentLoaded', () => {
                   initialLineWidth: config.waveInitialLineWidth
               });
           }
-          // --- END CREATE WAVE ---
       });
 
 
     window.addEventListener('mouseup', () => {
         isMouseDown = false; // Reset flag when mouse button is released
     });
+
+
 
      // --- Theme Change Handling ---
     // We need a way to detect theme changes. Since your theme toggle is in another
