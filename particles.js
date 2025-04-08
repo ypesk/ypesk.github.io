@@ -25,7 +25,7 @@ document.addEventListener('DOMContentLoaded', () => {
         mouseRadius: 200,        // Radius around mouse to interact/draw lines
 
         mouseRepelRadius: 150,   // Radius within which mouse pushes particles
-        mouseRepelStrength: 0.1, // How strong the push is (adjust sensitivity)
+        mouseRepelStrength: 0.05, // How strong the push is (adjust sensitivity)
 
         waveOnClick: true,       // Enable/disable the wave effect easily
         waveMaxRadius: 80,       // Should ideally match mouseRepelRadius
@@ -315,7 +315,7 @@ document.addEventListener('DOMContentLoaded', () => {
       // Auto-hide after a few seconds
       popupTimeoutId = setTimeout(() => {
            hideEasterEggPopup();
-      }, 4000); // Hide after 4 seconds (adjust as needed)
+      }, 5000); // Hide after 5 seconds
     }
 
     function hideEasterEggPopup() {
@@ -364,7 +364,7 @@ document.addEventListener('DOMContentLoaded', () => {
                   const distanceClick = Math.sqrt(dxClick * dxClick + dyClick * dyClick);
 
                   // Check if click is within particle radius
-                  if (distanceClick < p.radius) {
+                  if (distanceClick < p.radius+20) {
                       // console.log(`Clicked on particle ${i}`); // Debug
                       if (p.isEasterEgg) {
                           // console.log("Clicked on the EASTER EGG!"); // Debug
