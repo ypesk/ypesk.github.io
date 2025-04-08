@@ -1081,6 +1081,141 @@ body.dark-mode #lightbox-caption {
         padding-left: 15px;
         border-left-width: 3px;
     }
+
+    .education-entry .institution-location {
+        display: block;
+        margin-bottom: 15px;
+        line-height: 1.6;
+        padding-left: 0; /* Explicitly reset padding on the container */
+    }
+
+    /* Reset margin/padding and style icons/text spans */
+    .education-entry .institution-location > i,
+    .education-entry .institution-location > span:not(.info-separator) {
+        display: inline-block;
+        vertical-align: middle;
+        margin-left: 0;     /* <<< KEY RESET */
+        padding-left: 0;    /* <<< KEY RESET */
+        margin-bottom: 0;   /* Remove vertical margin from items themselves */
+    }
+
+    /* Style the icons */
+    .education-entry .institution-location > i {
+        width: 20px;
+        text-align: center;
+        margin-right: 8px; /* Keep space between icon and text */
+        color: var(--accent-color);
+    }
+
+    /* Style the actual text spans */
+    .education-entry .institution-location > span:not(.info-separator) {
+       /* No extra styles needed here unless specific overrides are required */
+    }
+    .education-entry .institution-location .institution-name,
+    .education-entry .institution-location .date-text {
+        font-weight: 600;
+        color: var(--text-color);
+    }
+    .education-entry .institution-location .location-text {
+         color: var(--secondary-text-color);
+    }
+
+    /* Use the separators to force line breaks & add spacing BELOW */
+    .education-entry .institution-location > span.info-separator {
+        content: "";
+        display: block;
+        height: 0;
+        margin-bottom: 8px; /* Space AFTER the break */
+        /* Ensure separators themselves have no horizontal effect */
+        margin-left: 0;
+        padding-left: 0;
+        width: 0;
+    }
+
+    /* Hide the last separator's effect */
+    .education-entry .institution-location > span.info-separator:last-of-type {
+        display: none;
+        margin-bottom: 0;
+    }
+
+
+    .education-entry .details {
+        padding-left: 0; /* Reset padding */
+        line-height: 1.6; /* Ensure consistent line height */
+    }
+
+    /* Keep icons, labels (strong), links (a) inline and aligned, reset horizontal spacing */
+    .education-entry .details > i,
+    .education-entry .details > strong,
+    .education-entry .details > a {
+        display: inline-block;   /* Use inline-block for better control */
+        vertical-align: middle; /* Align items on the line */
+        margin-left: 0;         /* Reset horizontal margin */
+        padding-left: 0;        /* Reset horizontal padding */
+        margin-bottom: 2px;     /* Add a tiny bit of space below each item if needed */
+    }
+
+    /* Reset specific margin potentially added by desktop rules */
+    .education-entry .details > i.fa-user:first-of-type {
+         margin-left: 0 !important; /* Force reset if needed */
+    }
+     .education-entry .details > i.fa-user {
+        /* Keep width and margin-right from existing rules if they look good */
+        /* width: 16px; */
+        /* text-align: center; */
+        /* margin-right: 8px; */
+    }
+
+
+    /* --- START: Advisor/Co-Advisor Stacking (Refined Alignment) --- */
+
+    /* Reset container padding */
+    .education-entry .details {
+        padding-left: 0;
+        line-height: 1.6;
+    }
+
+    /* --- FORCE horizontal reset on ALL relevant direct children --- */
+    .education-entry .details > i,
+    .education-entry .details > strong,
+    .education-entry .details > a {
+        display: inline-block;
+        vertical-align: middle;
+        margin-left: 0 !important;     /* <<< ADD !important FOR TESTING */
+        padding-left: 0 !important;    /* <<< ADD !important FOR TESTING */
+        margin-bottom: 2px;
+    }
+
+    /* Ensure NO specific rule adds margin-left back */
+     .education-entry .details > i.fa-user {
+        /* width: 16px; */       /* Keep if needed */
+        /* text-align: center; */ /* Keep if needed */
+        /* margin-right: 8px; */  /* Keep if needed */
+         margin-left: 0 !important; /* Reinforce reset specifically for icons */
+         padding-left: 0 !important;
+    }
+     /* Remove margin-left potentially added by the desktop :first-of-type rule */
+     /* No need for this anymore as the general selector above handles it */
+    /* .education-entry .details > i.fa-user:first-of-type {
+         margin-left: 0 !important;
+    } */
+
+
+    /* Use the separator span to force the line break */
+    .education-entry .details > span.details-separator {
+        content: "";
+        display: block;
+        height: 0;
+        margin-bottom: 8px;
+        margin-left: 0;
+        padding-left: 0;
+        width: 0;
+    }
+
+
+    /* --- END: Advisor/Co-Advisor Stacking (Refined Alignment) --- */
+
+
     #research-interests .interests-list li { padding-left: 18px; }
     .skill-tag { padding: 6px 12px; font-size: 0.85em; }
     .project-image { max-width: 100%; } /* Stack images */
