@@ -82,10 +82,6 @@ html {
     --content-gap: 35px;
     --main-content-padding: 45px;
 
-    --sidebar-width: 300px;
-    --content-gap: 35px;
-    --main-content-padding: 45px;
-
     /* Transitions */
     --global-transition: color 0.3s ease, background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
     --transform-transition: transform 0.25s ease;
@@ -156,15 +152,16 @@ body.dark-mode {
 /* Sidebar Styling */
 .sidebar {
     background-color: var(--sidebar-bg);
-    padding: 25px 30px; /*  Reduced top/bottom padding */
+    padding: 23px 30px; /*  Reduced top/bottom padding */
     border-radius: 12px;
     box-shadow: var(--container-shadow);
     border: 1px solid var(--border-color);
     position: sticky;
     top: 40px;
-    transition: var(--global-transition), border-color 0.3s ease;
+    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+    will-change: background-color, border-color; /* Hint the browser */
     /* height: calc(100vh - 80px); */ /* REMOVED: Let height be natural */
-    max-height: calc(100vh - 80px); /* ADDED: Prevent growing beyond viewport */
+    max-height: calc(100vh - 60px); /* ADDED: Prevent growing beyond viewport */
     overflow-y: auto; /* ADDED: Add scroll ONLY if content STILL overflows after spacing reduction */
     display: flex;
     flex-direction: column;
@@ -188,7 +185,7 @@ body.dark-mode {
     margin: 0 auto 15px auto; /*  Reduced bottom margin */
     border: 3px solid var(--profile-pic-border);
     box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
-    transition: var(--global-transition), border-color 0.3s ease;
+    transition: border-color 0.3s ease, background-color 0.3s ease;
     background-color: var(--border-color);
 }
 
@@ -207,7 +204,7 @@ body.dark-mode {
 }
 
 .sidebar-section {
-    margin-bottom: 20px; /*  Reduced margin */
+    margin-bottom: 18px; /*  Reduced margin */
     flex-shrink: 0;
 }
 .sidebar-section:last-of-type {
@@ -336,7 +333,7 @@ transition: var(--global-transition), transform 0.2s ease-out; /* Add transform 
     border-radius: 8px;
     border: 1px solid var(--border-color);
     box-shadow: var(--image-shadow);
-    transition: var(--global-transition);
+    transition: border-color 0.3s ease, background-color 0.3s ease;
     margin-top: 5px;
     background-color: var(--border-color);
 }
