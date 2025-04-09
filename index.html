@@ -544,18 +544,24 @@
         const body = document.body;
 
         function applyTheme(theme) {
-            body.classList.remove('light-mode', 'dark-mode'); // Remove existing classes
-            body.classList.add(theme + '-mode'); // Add the correct class
-            localStorage.setItem('theme', theme); // Save the preference
-             // console.log(`Applied theme: ${theme}-mode`); // Debug log
+            // Wrap the style-changing logic in requestAnimationFrame
+            requestAnimationFrame(() => {
+                body.classList.remove('light-mode', 'dark-mode'); // Remove existing classes
+                body.classList.add(theme + '-mode'); // Add the correct class
+                localStorage.setItem('theme', theme); // Save the preference
+                // console.log(`Applied theme via rAF: ${theme}-mode`); // Debug log
+            });
         }
 
         // Apply saved theme on load or detect system preference
         const savedTheme = localStorage.getItem('theme');
         const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-        // Determine initial theme: Use saved, else system pref, default to light
         const initialTheme = savedTheme ? savedTheme : (prefersDark ? 'dark' : 'light');
-        applyTheme(initialTheme); // Apply initial theme on load
+
+        // Also wrap the initial application if needed, though click is usually the issue
+        requestAnimationFrame(() => {
+            applyTheme(initialTheme); // Apply initial theme on load
+        });
 
 
         themeToggle.addEventListener('click', () => {
@@ -563,15 +569,12 @@
             applyTheme(newTheme);
         });
 
-         // Listen for system theme changes ONLY if no user preference is saved
+         // Listen for system theme changes... (keep existing logic)
          window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', event => {
-            // Only react if user hasn't explicitly set a preference via the button
             if (!localStorage.getItem('theme')) {
-                 // console.log('System theme changed, applying...'); // Debug log
                 applyTheme(event.matches ? 'dark' : 'light');
             }
         });
-
         const animationDuration = 700;
         // --- Intersection Observer for Animations ---
         const sections = document.querySelectorAll('.animated-section');
@@ -580,7 +583,7 @@
             rootMargin: '0px',
             threshold: 0.1 // Trigger when 10% is visible
         };
-        
+
         const observerCallback = (entries, observer) => {
             entries.forEach(entry => {
                 const targetElement = entry.target;
@@ -830,6 +833,340 @@
         });
     </script>
     <!-- END: Script for Progress Nav Positioning -->
+
+    <!-- Script to fix scroll bar on chrome -->
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+
+  // --- Theme Toggle Enhancement ---
+  const themeToggle = document.getElementById('theme-toggle');
+  const body = document.body;
+  const sidebarElement = document.querySelector('.sidebar'); // <<< GET SIDEBAR REFERENCE
+  const themeTransitionDuration = 300; // Match your primary CSS transition time (in milliseconds)
+
+  function applyTheme(theme) {
+      // Check if sidebar exists before trying to modify its style
+      if (!sidebarElement) {
+          console.warn("Sidebar element not found for overflow fix.");
+      }
+
+      requestAnimationFrame(() => { // Keep using rAF
+
+          // 1. Temporarily hide overflow BEFORE changing class
+          if (sidebarElement) {
+              // console.log('Hiding sidebar overflow'); // Debugging
+              sidebarElement.style.overflowY = 'hidden';
+          }
+
+          // 2. Change the theme class (your existing code)
+          body.classList.remove('light-mode', 'dark-mode');
+          body.classList.add(theme + '-mode');
+          localStorage.setItem('theme', theme);
+
+          // 3. Restore overflow setting AFTER transition likely completes
+          if (sidebarElement) {
+              // Use setTimeout to wait for CSS transitions
+              setTimeout(() => {
+                  // Reset inline style, allowing CSS 'auto' to take over again
+                  sidebarElement.style.overflowY = '';
+                  // console.log('Sidebar overflow reset to auto'); // Debugging
+              }, themeTransitionDuration + 50); // Duration + small buffer (e.g., 50ms)
+          }
+      });
+  }
+
+  // --- Keep your existing theme loading and event listeners ---
+  const savedTheme = localStorage.getItem('theme');
+  const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+  const initialTheme = savedTheme ? savedTheme : (prefersDark ? 'dark' : 'light');
+
+  // Apply initial theme (no overflow prevention needed here usually, but doesn't hurt)
+  // You could choose to only apply overflow logic on button click if initial load is fine
+  // Let's apply it always for consistency
+  applyTheme(initialTheme);
+
+
+  themeToggle.addEventListener('click', () => {
+      let newTheme = body.classList.contains('dark-mode') ? 'light' : 'dark';
+      applyTheme(newTheme); // This call will now use the overflow logic
+  });
+
+  window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', event => {
+       if (!localStorage.getItem('theme')) {
+           // Apply theme based on system change ONLY if no user preference is stored
+           applyTheme(event.matches ? 'dark' : 'light'); // This call will also use overflow logic
+       }
+  });
+
+  // --- End Theme Toggle Enhancement ---
+
+
+  // --- Include ALL your other working scripts below ---
+  // Set current year in footer
+  document.getElementById('year').textContent = new Date().getFullYear();
+
+  // --- Intersection Observer for Animations ---
+  const sectionsObserver = document.querySelectorAll('.main-content .animated-section'); // Target sections inside main-content
+  const animationDuration = 700; // Your CSS transition duration for sections
+  const observerOptionsSections = {
+      root: null,
+      rootMargin: '0px',
+      threshold: 0.1
+  };
+
+  const observerCallbackSections = (entries, observer) => {
+       entries.forEach(entry => {
+          const targetElement = entry.target;
+          // Using a data attribute to prevent re-triggering during animation
+          if (targetElement.dataset.isAnimating === 'true') return;
+
+          if (entry.isIntersecting) {
+              if (!targetElement.classList.contains('visible')) {
+                  targetElement.dataset.isAnimating = 'true';
+                  targetElement.classList.add('visible');
+                  setTimeout(() => {
+                       targetElement.dataset.isAnimating = 'false';
+                  }, animationDuration);
+              }
+          } else {
+              // Optional: Fade out when scrolling out of view
+              // Note: This might feel flickery depending on scroll speed
+              if (targetElement.classList.contains('visible')) {
+                   targetElement.dataset.isAnimating = 'true';
+                   targetElement.classList.remove('visible');
+                   setTimeout(() => {
+                       targetElement.dataset.isAnimating = 'false';
+                   }, animationDuration);
+              }
+          }
+      });
+  };
+  const intersectionObserverSections = new IntersectionObserver(observerCallbackSections, observerOptionsSections);
+  sectionsObserver.forEach(section => {
+      intersectionObserverSections.observe(section);
+  });
+
+
+  // ---- Lightbox Functionality ----
+  const lightbox = document.getElementById('image-lightbox');
+  const lightboxImg = document.getElementById('lightbox-img');
+  const lightboxCaption = document.getElementById('lightbox-caption');
+  const lightboxClose = document.querySelector('.lightbox-close');
+  const zoomableImages = document.querySelectorAll('.zoomable-image.project-image');
+
+  if (lightbox && lightboxImg && lightboxCaption && lightboxClose && zoomableImages.length > 0) {
+      zoomableImages.forEach(image => {
+          image.addEventListener('click', (e) => {
+              const clickedImage = e.target;
+              const imgSrc = clickedImage.src;
+              const imgCaption = clickedImage.dataset.caption || clickedImage.alt || "";
+              const isEnhancedZoom = clickedImage.dataset.zoom === 'enhanced';
+
+              if (isEnhancedZoom) {
+                  lightbox.classList.add('zoom-enhanced');
+              } else {
+                  lightbox.classList.remove('zoom-enhanced');
+              }
+
+              lightbox.classList.add('active');
+              lightboxImg.src = imgSrc;
+              lightboxImg.alt = clickedImage.alt;
+              lightboxCaption.textContent = imgCaption;
+              document.body.style.overflow = 'hidden'; // Prevent body scrolling when lightbox open
+          });
+      });
+
+      const closeLightbox = () => {
+          lightbox.classList.remove('active');
+          lightbox.classList.remove('zoom-enhanced');
+          document.body.style.overflow = ''; // Restore body scrolling
+           setTimeout(() => {
+              if (!lightbox.classList.contains('active')) {
+                 lightboxImg.src = "";
+                 lightboxImg.alt = "";
+                 lightboxCaption.textContent = "";
+               }
+           }, 300); // Match lightbox fade-out time
+      };
+
+      lightboxClose.addEventListener('click', closeLightbox);
+      lightbox.addEventListener('click', (e) => {
+          if (e.target === lightbox || e.target === lightbox.querySelector('.lightbox-inner-wrapper') ) { // Close on background click
+              closeLightbox();
+          }
+      });
+      document.addEventListener('keydown', (e) => {
+          if (e.key === "Escape" && lightbox.classList.contains('active')) {
+              closeLightbox();
+          }
+      });
+  } else {
+      console.warn("Lightbox elements not fully found.");
+  }
+
+
+  // --- Progress Navigation Active State ---
+  const sectionsNav = document.querySelectorAll('.main-content section[id]');
+  const progressDots = document.querySelectorAll('#progress-nav .progress-dot');
+  const navContainer = document.getElementById('progress-nav');
+
+  if (sectionsNav.length > 0 && progressDots.length > 0 && navContainer) {
+      const sectionDotMap = {};
+      progressDots.forEach(dot => {
+          const href = dot.getAttribute('href');
+          if (href && href.startsWith('#')) {
+              sectionDotMap[href.substring(1)] = dot;
+          }
+      });
+
+       // Get scrollPaddingTop value dynamically or use a safe fallback
+      let scrollPaddingTopValue = 120; // Default from your CSS
+      try {
+           scrollPaddingTopValue = parseInt(getComputedStyle(document.documentElement).scrollPaddingTop, 10);
+           if (isNaN(scrollPaddingTopValue)) scrollPaddingTopValue = 120;
+      } catch (e) {
+          // Use default if error
+      }
+
+      const observerOptionsNav = {
+           root: null,
+           rootMargin: `-${scrollPaddingTopValue}px 0px -60% 0px`, // Adjust top margin based on scroll padding
+           threshold: 0
+      };
+
+      let lastActiveDot = null;
+      const observerCallbackNav = (entries, observer) => {
+           let latestIntersectingEntry = null;
+
+           // Find the topmost intersecting entry within the rootMargin bounds
+           entries.forEach(entry => {
+               if (entry.isIntersecting) {
+                  if (!latestIntersectingEntry || entry.boundingClientRect.top < latestIntersectingEntry.boundingClientRect.top) {
+                      latestIntersectingEntry = entry;
+                  }
+               }
+           });
+
+           if (latestIntersectingEntry) {
+              const id = latestIntersectingEntry.target.getAttribute('id');
+              const correspondingDot = sectionDotMap[id];
+               if (correspondingDot && correspondingDot !== lastActiveDot) {
+                  if (lastActiveDot) {
+                      lastActiveDot.classList.remove('active');
+                  }
+                  correspondingDot.classList.add('active');
+                  lastActiveDot = correspondingDot;
+              }
+           } else {
+              // Optional: If nothing is intersecting according to the adjusted margin,
+              // maybe remove active class from the last one? Or leave it?
+              // Let's leave it for now to avoid flickering when scrolling fast between sections.
+           }
+      };
+      const intersectionObserverNav = new IntersectionObserver(observerCallbackNav, observerOptionsNav);
+      sectionsNav.forEach(section => {
+          intersectionObserverNav.observe(section);
+      });
+
+       const checkNavVisibility = () => {
+           const navShouldBeVisible = window.innerWidth > 850;
+           navContainer.style.display = navShouldBeVisible ? 'block' : 'none'; // Or 'flex' if needed
+      };
+      window.addEventListener('resize', checkNavVisibility);
+      checkNavVisibility();
+
+  } else {
+      console.warn("Progress Nav elements not fully found or no sections to track.");
+      if(navContainer) navContainer.style.display = 'none'; // Hide if setup incomplete
+  }
+
+
+  // --- Progress Navigation Positioning ---
+  const mainContent = document.querySelector('.main-content');
+  const navPositioned = document.getElementById('progress-nav'); // Use a different var name
+  const desiredGap = 25;
+
+  function updateNavPosition() {
+      const navShouldBeVisible = window.innerWidth > 850;
+      if (!navShouldBeVisible || !mainContent || !navPositioned) {
+           if (navPositioned) {
+              navPositioned.classList.remove('positioned');
+              navPositioned.style.left = '-9999px';
+              navPositioned.style.display = 'none'; // Also ensure display:none
+           }
+          return;
+      }
+
+      // Ensure nav is potentially visible before calculating position
+      navPositioned.style.display = 'block'; // Or 'flex'
+
+      const mainContentRect = mainContent.getBoundingClientRect();
+      const navLeft = mainContentRect.right + desiredGap;
+      navPositioned.style.left = `${navLeft}px`;
+      navPositioned.classList.add('positioned');
+  }
+
+  // Use setTimeout for initial position calculation after layout settles
+  setTimeout(updateNavPosition, 100);
+
+  let resizeTimer;
+  window.addEventListener('resize', () => {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(updateNavPosition, 150); // Slightly longer debounce
+  });
+
+
+  // Easter Egg Popup
+  const profilePic = document.querySelector('.profile-pic');
+  const easterEggPopup = document.getElementById('easter-egg-popup');
+  const popupCloseButton = easterEggPopup ? easterEggPopup.querySelector('.popup-close') : null;
+  let clickCount = 0;
+  let clickTimer = null;
+
+  if (profilePic && easterEggPopup && popupCloseButton) {
+      profilePic.addEventListener('click', () => {
+          clickCount++;
+          // Reset timer on each click
+          clearTimeout(clickTimer);
+          // Set a timer to reset count if clicks are too far apart (e.g., 1 second)
+          clickTimer = setTimeout(() => {
+              clickCount = 0;
+          }, 1000);
+
+          if (clickCount >= 5) { // Trigger after 5 clicks
+              easterEggPopup.classList.add('visible');
+              clickCount = 0; // Reset count after showing
+              clearTimeout(clickTimer); // Clear timer
+
+               // Auto-hide after a few seconds (optional)
+               setTimeout(() => {
+                   easterEggPopup.classList.remove('visible');
+               }, 5000); // Hide after 5 seconds
+          }
+      });
+
+      popupCloseButton.addEventListener('click', () => {
+           easterEggPopup.classList.remove('visible');
+      });
+  }
+
+  // --- Particles.js Initialization ---
+  // Assuming particles.js is loaded and provides a particlesJS function
+  if (typeof particlesJS === 'function') {
+      particlesJS.load('particle-canvas', 'particles.json', function() {
+        // console.log('callback - particles.js config loaded'); // Optional callback
+      });
+  } else {
+      console.warn("particlesJS not found. Skipping particle animation.");
+  }
+
+
+}); // End DOMContentLoaded
+</script>
+
+
+</script>
 
 
 </body>
