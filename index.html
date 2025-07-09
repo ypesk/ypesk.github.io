@@ -65,9 +65,9 @@
              <section id="languages-sidebar" class="sidebar-section">
                 <h3><i class="fas fa-language fa-fw"></i> Languages</h3>
                  <ul class="languages-list">
-                   <li><strong>🇫🇷&nbsp;  French</strong> - Native</li>
-                   <li><strong>🇬🇧&nbsp;  English</strong> - Fluent</li>
-                   <li><strong>🇪🇸&nbsp;  Spanish</strong> - Intermediate</li>
+                   <li><strong>🇫🇷   French</strong> - Native</li>
+                   <li><strong>🇬🇧   English</strong> - Fluent</li>
+                   <li><strong>🇪🇸   Spanish</strong> - Intermediate</li>
                  </ul>
             </section>
             <!-- Location section will be pushed down by flexbox -->
@@ -436,7 +436,7 @@
             </section>
 
             <footer>
-                <p>© <span id="year"></span> Youri Peskine. Last updated: <span id="last-updated">April 2025</span>.</p>
+                <p>© <span id="year"></span> Youri Peskine. Last updated: <span id="last-updated">July 2025</span>.</p>
             </footer>
 
         </main> <!-- /main-content -->
@@ -590,10 +590,10 @@
 
                 // --- Add this check ---
                 // If the element is currently marked as animating, ignore this observer entry
-                if (targetElement.dataset.isAnimating === 'true') {
+                //if (targetElement.dataset.isAnimating === 'true') {
                     // console.log(`Ignoring observer entry for ${targetElement.id} because it's animating.`); // Debugging
-                    return;
-                }
+                //    return;
+                //}
 
                 if (entry.isIntersecting) {
                     // Only act if it's not already visible
@@ -908,37 +908,20 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // --- Intersection Observer for Animations ---
   const sectionsObserver = document.querySelectorAll('.main-content .animated-section'); // Target sections inside main-content
-  const animationDuration = 700; // Your CSS transition duration for sections
   const observerOptionsSections = {
       root: null,
       rootMargin: '0px',
-      threshold: 0.1
+      threshold: 0.1 // Trigger when 10% of the section is visible
   };
 
   const observerCallbackSections = (entries, observer) => {
-       entries.forEach(entry => {
-          const targetElement = entry.target;
-          // Using a data attribute to prevent re-triggering during animation
-          if (targetElement.dataset.isAnimating === 'true') return;
-
+      entries.forEach(entry => {
+          // If the element is intersecting the viewport, add the 'visible' class to trigger the animation.
+          // Then, unobserve the element so the animation only happens once.
           if (entry.isIntersecting) {
-              if (!targetElement.classList.contains('visible')) {
-                  targetElement.dataset.isAnimating = 'true';
-                  targetElement.classList.add('visible');
-                  setTimeout(() => {
-                       targetElement.dataset.isAnimating = 'false';
-                  }, animationDuration);
-              }
-          } else {
-              // Optional: Fade out when scrolling out of view
-              // Note: This might feel flickery depending on scroll speed
-              if (targetElement.classList.contains('visible')) {
-                   targetElement.dataset.isAnimating = 'true';
-                   targetElement.classList.remove('visible');
-                   setTimeout(() => {
-                       targetElement.dataset.isAnimating = 'false';
-                   }, animationDuration);
-              }
+              const targetElement = entry.target;
+              targetElement.classList.add('visible');
+              observer.unobserve(targetElement);
           }
       });
   };
