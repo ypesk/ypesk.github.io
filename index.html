@@ -345,6 +345,43 @@
             <section id="projects" class="animated-section">
                 <h2><i class="fa-solid fa-diagram-project fa-fw"></i> Projects</h2>
 
+                <div class="project-entry" id="project-conspiracy">
+                    <h3>Detecting conspiracy theories in text, 2021-2025</h3>
+                    <div class="project-description">
+                        <p> Developed state-of-the art models to detect conspiracy theories in online social media texts. Participated in multiple competitive research challenges:</p>
+                          <u>MediaEval (2021/2022)</u>: Trained BERT-based models on COVID-related conspiracy theories. Explored multiple loss-functions and training methodologies. Our models obtained the best results in most tasks.
+                          <p><a href="https://github.com/D2KLab/mediaeval-fakenews" target="_blank" rel="noopener noreferrer">[GitHub]</a> <a href="https://ceur-ws.org/Vol-3181/paper65.pdf" target="_blank" rel="noopener noreferrer">[Publication 1]</a> <a href="https://hal.science/hal-03945796/" target="_blank" rel="noopener noreferrer">[Publication 2]</a></p>
+                          <u>HuggingFace Frugal AI Challenge (2025)</u>: Participated in the textual task of detecting climate disinformation. This challenge tracks the models' accuracy and energy consumption, encouraging to keep efficiency in mind when deploying AI models. Our team obtained the first place using a T5 model as an encoder, and a multi-layer percpetron as a classifier. We detail our code and additional experiments on <a href="https://github.com/D2KLab/frugal-ai-challenge-eurecom" target="_blank" rel="noopener noreferrer">GitHub</a>.
+
+                    </div>
+                    <div class="project-description skills-used"> <!-- Added class for specific styling -->
+                      <p><strong>Skills:</strong> Python, BERT, transformers, classification, frugality</p>
+                    </div>
+                </div>
+
+                <hr class="entry-separator">
+
+                <div class="project-entry" id="project-cimple">
+                    <h3>CimpleKG: A Continuously Updated Knowledge Graph on Misinformation, Factors and Fact-Checks, 2024</h3>
+                    <div class="project-description">
+                        <p> Participed in the developement of the largest, continuously updated knowledge graph of misinformation related documents to help researchers and fact-checkers combat misinformation.
+                          This KG contains more than 15 million of triples, with over 200k fact-checked claims and 200k documents from static misinformation datasets, and is updated daily with new fact-checks coming from fact-checkers.
+                          Every document is further enhanced by extracting entities and textual features using NLP tools (emotion, sentiment, political leaning, conspiracy theories, persuasion techniques).
+                          The resource is accessible through our <a href="https://data.cimple.eu/sparql" target="_blank" rel="noopener noreferrer">SPARQL endpoint</a> or with an <a href="https://explorer.cimple.eu/" target="_blank" rel="noopener noreferrer"> online browser</a>, and daily releases are pushed on <a href="https://github.com/CIMPLE-project/knowledge-base" target="_blank" rel="noopener noreferrer">GitHub</a>.
+                        </p>
+                    </div>
+                    <div class="project-screenshots">
+                        <img src="images/CimpleKG/cimple_explorer.png" alt="View of the Cimple KG Explorer" class="zoomable-image project-image" data-zoom="enhanced" data-caption="Frontpage view of the Cimple KG Explorer.">
+                        <img src="images/CimpleKG/cimple_explorer_2.png" alt="View of the Cimple KG Explorer" class="zoomable-image project-image" data-zoom="enhanced" data-caption="Search view of the Cimple KG Explorer.">
+                    </div>
+                    <div class="project-description skills-used"> <!-- Added class for specific styling -->
+                      <p><strong>Skills:</strong> Python, Knowledge Graphs, rdflib, transformers</p>
+                      <p><a href="https://github.com/CIMPLE-project/knowledge-base" target="_blank" rel="noopener noreferrer">[GitHub]</a> <a href="https://link.springer.com/chapter/10.1007/978-3-031-77847-6_6" target="_blank" rel="noopener noreferrer">[Publication]</a></p>
+                    </div>
+                </div>
+
+                <hr class="entry-separator">
+                
                 <div class="project-entry" id="project-rl">
                     <h3>Training Reinforcement Learning Agents, 2018</h3>
                     <div class="project-description">
@@ -1150,4 +1187,5 @@ document.addEventListener('DOMContentLoaded', () => {
 
 </body>
 </html>
+
 
